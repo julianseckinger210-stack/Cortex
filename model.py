@@ -20,6 +20,26 @@ VOCAB_SIZE = 257
 TRAINING_CHUNK_SIZE = 256
 MAX_GENERATED_BYTES = 1600
 
+INSTRUCTION_COLUMNS = ("instruction", "question", "request", "task")
+FALLBACK_PROMPT_COLUMNS = ("prompt", "text")
+CODE_COLUMNS = (
+    "code",
+    "output",
+    "completion",
+    "response",
+    "answer",
+    "solution",
+)
+INSTRUCTION_START_MARKERS = ("### instruction:", "### anforderung:")
+INPUT_START_MARKERS = ("### input:", "### eingabe:")
+ANSWER_MARKERS = (
+    "### output:",
+    "### response:",
+    "### antwort:",
+    "### python-code:",
+    "### code:",
+)
+
 DEMO_EXAMPLES = [
     {
         "prompt": "Schreibe eine Funktion, die zwei Zahlen addiert.",
@@ -57,11 +77,88 @@ class CodeModel(nn.Module):
         logits, hidden, _, _ = self.forward_with_activations(token_ids, hidden)
         return logits, hidden
 
-    def forward_with_activations(self, token_ids, hidden=None):
+    def forward_with_activations(self, token_ids, hidden=None, include_layers=False):
         embedded = self.embedding(token_ids)
         recurrent, hidden = self.lstm(embedded, hidden)
         logits = self.output(recurrent)
+        if include_layers:
+            layer_activations = hidden[0][:, 0, :]
+            return logits, hidden, embedded[0, -1], recurrent[0, -1], layer_activations
         return logits, hidden, embedded[0, -1], recurrent[0, -1]
+
+
+def build_prompt_prefix(prompt):
+    return f"### Anforderung:\n{prompt.strip()}\n### Python-Code:\n"
+
+
+def build_training_text(prompt, code):
+    return f"{build_prompt_prefix(prompt)}{code.strip()}\n"
+
+
+def _strip_leaked_answer(prompt, code):
+    """Entfernt eine im Prompt enthaltene Lösung (Data-Leakage)."""
+    text = prompt.strip()
+    code_text = code.strip()
+    if len(code_text) < 20 or code_text not in text:
+        return text
+    before_answer = text.split(code_text, 1)[0].strip()
+    return before_answer or text
+
+
+def _prompt_from_template(prompt):
+    """Zieht Anforderung und Eingabe aus einem Trainings-Template heraus."""
+    text = prompt.strip()
+    lowered = text.casefold()
+
+    instruction_start = 0
+    for marker in INSTRUCTION_START_MARKERS:
+        index = lowered.find(marker)
+        if index != -1:
+            instruction_start = index + len(marker)
+            break
+
+    answer_positions = [
+        lowered.find(marker, instruction_start) for marker in ANSWER_MARKERS
+    ]
+    answer_positions = [index for index in answer_positions if index != -1]
+    instruction_end = min(answer_positions) if answer_positions else len(text)
+    instruction = text[instruction_start:instruction_end].strip()
+
+    input_text = ""
+    for marker in INPUT_START_MARKERS:
+        index = lowered.find(marker, instruction_start)
+        if index == -1:
+            continue
+        input_start = index + len(marker)
+        input_positions = [
+            lowered.find(answer_marker, input_start)
+            for answer_marker in ANSWER_MARKERS
+        ]
+        input_positions = [pos for pos in input_positions if pos != -1]
+        input_end = min(input_positions) if input_positions else len(text)
+        candidate = text[input_start:input_end].strip()
+        if candidate and candidate not in instruction:
+            input_text = candidate
+        break
+
+    if input_text:
+        return f"{instruction}\n\nEingabe:\n{input_text}"
+    return instruction
+
+
+def _sanitize_prompt(prompt, code):
+    text = prompt.strip()
+    if not text:
+        return text
+    template_markers = (
+        INSTRUCTION_START_MARKERS + ANSWER_MARKERS + INPUT_START_MARKERS
+    )
+    lowered = text.casefold()
+    if any(marker in lowered for marker in template_markers):
+        text = _prompt_from_template(text)
+    if not text:
+        text = prompt.strip()
+    return _strip_leaked_answer(text, code)
 
 
 def load_training_examples(path, max_examples=None):
@@ -88,22 +185,24 @@ def load_training_examples(path, max_examples=None):
         prompt_name = next(
             (
                 column_names[name]
-                for name in ("prompt", "instruction", "question", "request", "task")
+                for name in INSTRUCTION_COLUMNS
                 if name in column_names
             ),
             None,
         )
+        if prompt_name is None:
+            prompt_name = next(
+                (
+                    column_names[name]
+                    for name in FALLBACK_PROMPT_COLUMNS
+                    if name in column_names
+                ),
+                None,
+            )
         code_name = next(
             (
                 column_names[name]
-                for name in (
-                    "code",
-                    "output",
-                    "completion",
-                    "response",
-                    "answer",
-                    "solution",
-                )
+                for name in CODE_COLUMNS
                 if name in column_names
             ),
             None,
@@ -136,13 +235,20 @@ def load_training_examples(path, max_examples=None):
                 raise ValueError(
                     f"Parquet-Zeile {row_number}: Code ist leer oder kein Text."
                 )
+            prompt = _sanitize_prompt(prompt, code)
             if (
                 input_name
                 and input_name != prompt_name
                 and isinstance(extra_input, str)
                 and extra_input.strip()
+                and extra_input.strip() not in prompt
             ):
-                prompt = f"{prompt.strip()}\n\nEingabe:\n{extra_input.strip()}"
+                prompt = f"{prompt}\n\nEingabe:\n{extra_input.strip()}"
+            if not prompt.strip():
+                raise ValueError(
+                    f"Parquet-Zeile {row_number}: Anforderung ist nach dem "
+                    "Entfernen der Lösung leer."
+                )
             examples.append((prompt.strip(), code.strip()))
         if not examples:
             raise ValueError(
@@ -174,7 +280,13 @@ def load_training_examples(path, max_examples=None):
                 raise ValueError(
                     f"Zeile {line_number} braucht ein nicht-leeres Textfeld 'code'."
                 )
-            examples.append((prompt.strip(), code.strip()))
+            prompt = _sanitize_prompt(prompt, code)
+            if not prompt:
+                raise ValueError(
+                    f"Zeile {line_number}: Anforderung ist nach dem Entfernen "
+                    "der Lösung leer."
+                )
+            examples.append((prompt, code.strip()))
             if max_examples is not None and len(examples) >= max_examples:
                 break
     if not examples:
@@ -242,7 +354,7 @@ def train_model(
     loss_function = nn.CrossEntropyLoss()
     sequences = []
     for prompt, code in examples:
-        text = f"### Anforderung:\n{prompt}\n### Python-Code:\n{code}\n"
+        text = build_training_text(prompt, code)
         token_ids = list(text.encode("utf-8")) + [EOS_TOKEN]
         sequences.append(torch.tensor(token_ids, dtype=torch.long))
 
@@ -303,18 +415,19 @@ def train_model(
     return model
 
 
-def generate_code(model, prompt, activation_callback=None):
+def generate_code(model, prompt, activation_callback=None, network_callback=None):
     if not prompt.strip():
         raise ValueError("Gib zuerst eine Anforderung ein.")
     if len(prompt) > 2000:
         raise ValueError("Die Anforderung darf höchstens 2000 Zeichen lang sein.")
 
-    prefix = f"### Anforderung:\n{prompt.strip()}\n### Python-Code:\n"
+    prefix = build_prompt_prefix(prompt)
     token_ids = torch.tensor([list(prefix.encode("utf-8"))], dtype=torch.long)
     model.eval()
     with torch.no_grad():
-        logits, hidden, embedding, recurrent = model.forward_with_activations(
-            token_ids
+        previous_layer_activations = None
+        logits, hidden, embedding, recurrent, layer_activations = (
+            model.forward_with_activations(token_ids, include_layers=True)
         )
         next_token = logits[0, -1].argmax().view(1, 1)
         generated = bytearray()
@@ -328,11 +441,27 @@ def generate_code(model, prompt, activation_callback=None):
                     token,
                     step + 1,
                 )
+            if network_callback is not None:
+                network_callback(
+                    embedding.detach().cpu().tolist(),
+                    layer_activations.detach().cpu().tolist(),
+                    logits[0, -1].detach().cpu().tolist(),
+                    token,
+                    step + 1,
+                    (
+                        previous_layer_activations.detach().cpu().tolist()
+                        if previous_layer_activations is not None
+                        else None
+                    ),
+                )
             if token == EOS_TOKEN:
                 break
             generated.append(token)
-            logits, hidden, embedding, recurrent = model.forward_with_activations(
-                next_token, hidden
+            previous_layer_activations = hidden[0][:, 0, :]
+            logits, hidden, embedding, recurrent, layer_activations = (
+                model.forward_with_activations(
+                    next_token, hidden, include_layers=True
+                )
             )
             next_token = logits[0, -1].argmax().view(1, 1)
     return generated.decode("utf-8", errors="replace").strip()

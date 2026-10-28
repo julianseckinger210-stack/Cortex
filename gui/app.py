@@ -55,6 +55,9 @@ class CodeGeneratorApp:
         self.last_activation = None
         self.visual_window = None
         self.visual_nodes = {}
+        self.visual_node_indices = {}
+        self.visual_weights = None
+        self.visual_weights_model_id = None
         self._update_device_info()
 
         self._build_ui()
@@ -658,100 +661,366 @@ class CodeGeneratorApp:
 
         window = tk.Toplevel(self.root)
         window.title("Cortex - Netzwerkaktivität")
-        window.geometry("1080x640")
-        window.minsize(1080, 620)
+        window.geometry("1120x700")
+        window.minsize(780, 520)
         window.protocol("WM_DELETE_WINDOW", self._close_visualization)
         self.visual_window = window
 
-        ttk.Label(
-            window,
-            text=(
-                "Aktivierungen des letzten Verarbeitungsschritts. "
-                "Die Farbe zeigt die relative Stärke und das Vorzeichen."
-            ),
-            wraplength=1040,
-        ).pack(anchor="w", padx=12, pady=(10, 4))
-
-        canvas = tk.Canvas(window, background="#181a20", highlightthickness=0)
-        canvas.pack(fill="both", expand=True, padx=10, pady=8)
+        canvas = tk.Canvas(window, background="#f5f5f7", highlightthickness=0)
+        canvas.pack(fill="both", expand=True)
         self.visual_canvas = canvas
-        self.visual_nodes = {"embedding": [], "recurrent": [], "logits": []}
+        self.visual_nodes = {}
+        self.visual_node_indices = {}
+        canvas.bind("<Configure>", self._render_visualization)
+        self._render_visualization()
 
+    def _render_visualization(self, event=None):
+        if self.visual_window is None or not self.visual_window.winfo_exists():
+            return
+
+        canvas = self.visual_canvas
+        width = event.width if event is not None else canvas.winfo_width()
+        height = event.height if event is not None else canvas.winfo_height()
+        if width < 200 or height < 200:
+            return
+
+        if self.last_activation is None:
+            hidden_size = self.model.hidden_size if self.model else self.hidden_size.get()
+            layer_count = self.model.num_layers if self.model else self.num_layers.get()
+            embedding = [0.0] * hidden_size
+            layers = [[0.0] * hidden_size for _ in range(layer_count)]
+            logits = [0.0] * VOCAB_SIZE
+            token = None
+            step = None
+        else:
+            embedding, layers, logits, token, step, _previous_layers = (
+                self.last_activation
+            )
+            hidden_size = len(embedding)
+            layer_count = len(layers)
+
+        canvas.delete("all")
+        self.visual_nodes = {}
+        self.visual_node_indices = {}
         canvas.create_text(
-            130,
-            26,
-            text=f"Byte-Embedding · {self.hidden_size.get()}",
-            fill="white",
-            font=("Segoe UI", 11),
+            24,
+            22,
+            text="Netzwerkaktivität",
+            anchor="w",
+            fill="#1d1d1f",
+            font=("Segoe UI", 16, "bold"),
         )
         canvas.create_text(
-            500,
-            26,
-            text=f"LSTM-Zustand · {self.num_layers.get()} Layer · {self.hidden_size.get()}",
-            fill="white",
-            font=("Segoe UI", 11),
-        )
-        canvas.create_text(
-            875,
-            26,
-            text=f"Ausgabe-Logits · {VOCAB_SIZE}",
-            fill="white",
-            font=("Segoe UI", 11),
-        )
-        canvas.create_line(250, 230, 365, 230, fill="#7f8794", arrow=tk.LAST, width=2)
-        canvas.create_line(620, 230, 735, 230, fill="#7f8794", arrow=tk.LAST, width=2)
-        self.visual_status = canvas.create_text(
-            540,
-            525,
-            text="Warte auf Codegenerierung…",
-            fill="#d0d4dc",
+            24,
+            48,
+            text="Aktivierungen für das jeweils nächste erzeugte Byte",
+            anchor="w",
+            fill="#6e6e73",
             font=("Segoe UI", 10),
         )
-        self._draw_node_grid("embedding", 55, 55, 8, 20)
-        self._draw_node_grid("recurrent", 425, 55, 8, 20)
-        self._draw_node_grid("logits", 735, 55, 17, 17)
-        if self.last_activation is not None:
-            self._update_visualization(self.last_activation)
 
-    def _draw_node_grid(self, group, start_x, start_y, columns, spacing):
-        radius = 6 if group == "logits" else 7
-        node_count = VOCAB_SIZE if group == "logits" else self.hidden_size.get()
-        for index in range(node_count):
-            x = start_x + (index % columns) * spacing
-            y = start_y + (index // columns) * 28
+        columns = [("embedding", "Embedding", embedding)]
+        columns.extend(
+            (f"layer_{index}", f"LSTM {index + 1}", values)
+            for index, values in enumerate(layers)
+        )
+        columns.append(("logits", "Byte-Ausgabe", logits))
+
+        margin = 30
+        column_width = (width - 2 * margin) / len(columns)
+        node_top = 118
+        node_bottom = height - 76
+        max_visible = max(6, min(24, int((width - 2 * margin) / len(columns) / 4)))
+        points = {}
+        for column_index, (group, title, values) in enumerate(columns):
+            center_x = margin + (column_index + 0.5) * column_width
+            canvas.create_text(
+                center_x,
+                82,
+                text=title,
+                fill="#1d1d1f",
+                font=("Segoe UI", 10, "bold"),
+            )
+            canvas.create_line(
+                center_x,
+                96,
+                center_x,
+                height - 54,
+                fill="#e5e5ea",
+                width=1,
+            )
+            required_indices = (
+                [token] if group == "logits" and token is not None else []
+            )
+            neuron_indices = self._visible_neuron_indices(
+                values, max_visible, required_indices
+            )
+            self.visual_node_indices[group] = neuron_indices
+            self.visual_nodes[group] = []
+            count = len(neuron_indices)
+            for row, neuron_index in enumerate(neuron_indices):
+                y = node_top + (row + 0.5) * (node_bottom - node_top) / count
+                points[(group, neuron_index)] = (center_x, y)
+
+        self._draw_active_connections(columns, points)
+        for group, _title, values in columns:
+            self._draw_neurons(group, values, points)
+
+        self.visual_status = canvas.create_text(
+            24,
+            height - 25,
+            text=(
+                "Je Zielneuron: die stärksten Beiträge der angezeigten Neuronen. "
+                "Orange/blau = positiver/negativer Beitrag."
+            ),
+            anchor="w",
+            fill="#6e6e73",
+            font=("Segoe UI", 9),
+        )
+        if step is not None:
+            token_text = "Ende" if token == EOS_TOKEN else f"{token} ({chr(token)!r})"
+            canvas.itemconfigure(
+                self.visual_status,
+                text=(
+                    f"Schritt {step} · nächstes Byte: {token_text} · "
+                    "Linien zeigen die stärksten gewichteten Verbindungen"
+                ),
+            )
+
+    @staticmethod
+    def _visible_neuron_indices(values, limit, required_indices=()):
+        strongest = sorted(
+            range(len(values)),
+            key=lambda index: abs(values[index]),
+            reverse=True,
+        )[:limit]
+        selected = sorted(strongest)
+        for index in required_indices:
+            if index not in selected:
+                selected[-1:] = [index] if selected else [index]
+        return sorted(selected)
+
+    def _draw_active_connections(self, columns, points):
+        if self.model is None:
+            return
+        self._prepare_visualization_weights()
+        if self.visual_weights is None:
+            return
+
+        for source_column, target_column in zip(columns, columns[1:]):
+            source_group, _source_title, source_values = source_column
+            target_group = target_column[0]
+            source_indices = self.visual_node_indices[source_group]
+            target_indices = self.visual_node_indices[target_group]
+            if target_group == "logits":
+                weights = self.visual_weights["output"]
+                source_tensor = torch.tensor(
+                    [source_values[index] for index in source_indices],
+                    dtype=weights.dtype,
+                )
+                contributions = (
+                    weights.index_select(0, torch.tensor(target_indices))
+                    .index_select(1, torch.tensor(source_indices))
+                    .mul(source_tensor)
+                    .tolist()
+                )
+                scores = [[abs(value) for value in row] for row in contributions]
+            else:
+                layer_index = int(target_group.split("_")[1])
+                weights = self.visual_weights["layers"][layer_index]
+                hidden_size = self.model.hidden_size
+                gate_rows = torch.tensor(
+                    [
+                        gate * hidden_size + target_index
+                        for gate in range(4)
+                        for target_index in target_indices
+                    ]
+                )
+                selected_weights = (
+                    weights.index_select(0, gate_rows)
+                    .index_select(1, torch.tensor(source_indices))
+                    .reshape(4, len(target_indices), len(source_indices))
+                )
+                source_tensor = torch.tensor(
+                    [source_values[index] for index in source_indices],
+                    dtype=weights.dtype,
+                )
+                contributions = (
+                    selected_weights.sum(dim=0).mul(source_tensor).tolist()
+                )
+                scores = (
+                    selected_weights.abs()
+                    .sum(dim=0)
+                    .mul(source_tensor.abs())
+                    .tolist()
+                )
+
+            strongest_scores = sorted(
+                (score for row in scores for score in row), reverse=True
+            )
+            maximum = strongest_scores[0] if strongest_scores else 0
+            if maximum == 0:
+                continue
+            for target_position, target_index in enumerate(target_indices):
+                strongest = sorted(
+                    range(len(source_indices)),
+                    key=lambda position: scores[target_position][position],
+                    reverse=True,
+                )[: min(2, len(source_indices))]
+                for source_position in strongest:
+                    strength = scores[target_position][source_position] / maximum
+                    if strength <= 0:
+                        continue
+                    contribution = contributions[target_position][source_position]
+                    color = "#d17a32" if contribution >= 0 else "#3478b8"
+                    start = points[(source_group, source_indices[source_position])]
+                    end = points[(target_group, target_index)]
+                    self.visual_canvas.create_line(
+                        *start,
+                        *end,
+                        fill=color,
+                        width=0.8 + 1.8 * strength,
+                        arrow=tk.LAST,
+                        arrowshape=(5, 7, 3),
+                        tags=("active_connection",),
+                    )
+
+        previous_layers = (
+            self.last_activation[5]
+            if self.last_activation is not None
+            else None
+        )
+        if previous_layers is None:
+            return
+
+        for layer_index, previous_values in enumerate(previous_layers):
+            group = f"layer_{layer_index}"
+            neuron_indices = self.visual_node_indices[group]
+            weights = self.visual_weights["recurrent"][layer_index]
+            hidden_size = self.model.hidden_size
+            gate_rows = torch.tensor(
+                [
+                    gate * hidden_size + target_index
+                    for gate in range(4)
+                    for target_index in neuron_indices
+                ]
+            )
+            selected_weights = (
+                weights.index_select(0, gate_rows)
+                .index_select(1, torch.tensor(neuron_indices))
+                .reshape(4, len(neuron_indices), len(neuron_indices))
+            )
+            source_tensor = torch.tensor(
+                [previous_values[index] for index in neuron_indices],
+                dtype=weights.dtype,
+            )
+            contributions = (
+                selected_weights.sum(dim=0).mul(source_tensor).tolist()
+            )
+            scores = (
+                selected_weights.abs()
+                .sum(dim=0)
+                .mul(source_tensor.abs())
+                .tolist()
+            )
+            strongest_scores = sorted(
+                (score for row in scores for score in row), reverse=True
+            )
+            maximum = strongest_scores[0] if strongest_scores else 0
+            if maximum == 0:
+                continue
+            center_x = points[(group, neuron_indices[0])][0]
+            loop_x = center_x + 8
+            for target_position, target_index in enumerate(neuron_indices):
+                strongest = sorted(
+                    range(len(neuron_indices)),
+                    key=lambda position: scores[target_position][position],
+                    reverse=True,
+                )[: min(2, len(neuron_indices))]
+                for source_position in strongest:
+                    strength = scores[target_position][source_position] / maximum
+                    if strength <= 0:
+                        continue
+                    source_index = neuron_indices[source_position]
+                    contribution = contributions[target_position][source_position]
+                    color = "#d17a32" if contribution >= 0 else "#3478b8"
+                    start_y = points[(group, source_index)][1]
+                    end_y = points[(group, target_index)][1]
+                    self.visual_canvas.create_line(
+                        center_x + 4,
+                        start_y,
+                        loop_x,
+                        start_y,
+                        loop_x,
+                        end_y,
+                        center_x + 4,
+                        end_y,
+                        smooth=True,
+                        splinesteps=12,
+                        fill=color,
+                        width=0.8 + 1.8 * strength,
+                        arrow=tk.LAST,
+                        arrowshape=(5, 7, 3),
+                        tags=("active_connection", "recurrent_connection"),
+                    )
+
+    def _prepare_visualization_weights(self):
+        if self.visual_weights_model_id == id(self.model):
+            return
+        self.visual_weights_model_id = id(self.model)
+        self.visual_weights = None
+        if self.model is None:
+            return
+        self.visual_weights = {
+            "layers": [
+                getattr(self.model.lstm, f"weight_ih_l{index}")
+                .detach()
+                .cpu()
+                for index in range(self.model.num_layers)
+            ],
+            "recurrent": [
+                getattr(self.model.lstm, f"weight_hh_l{index}")
+                .detach()
+                .cpu()
+                for index in range(self.model.num_layers)
+            ],
+            "output": self.model.output.weight.detach().cpu(),
+        }
+
+    def _draw_neurons(self, group, values, points):
+        radius = 4
+        for neuron_index in self.visual_node_indices[group]:
+            x, y = points[(group, neuron_index)]
+            is_selected_output = (
+                group == "logits"
+                and self.last_activation is not None
+                and neuron_index == self.last_activation[3]
+            )
             node = self.visual_canvas.create_oval(
                 x - radius,
                 y - radius,
                 x + radius,
                 y + radius,
-                fill="#343943",
-                outline="#686f7b",
+                fill="#e5e5ea",
+                outline="#1d1d1f" if is_selected_output else "#ffffff",
+                width=2 if is_selected_output else 1,
             )
             self.visual_nodes[group].append(node)
+        self._color_nodes(group, values)
 
     def _update_visualization(self, activation):
-        embedding, recurrent, logits, token, step = activation
-        self._color_nodes("embedding", embedding)
-        self._color_nodes("recurrent", recurrent)
-        self._color_nodes("logits", logits)
-        for index, node in enumerate(self.visual_nodes["logits"]):
-            self.visual_canvas.itemconfigure(
-                node,
-                outline="#ffe066" if index == token else "#686f7b",
-                width=2 if index == token else 1,
-            )
-        token_text = "Ende" if token == EOS_TOKEN else f"{token} ({chr(token)!r})"
-        self.visual_canvas.itemconfigure(
-            self.visual_status,
-            text=f"Generierungsschritt {step} · nächstes Byte: {token_text}",
-        )
+        self.last_activation = activation
+        self._render_visualization()
 
     def _color_nodes(self, group, values):
         maximum = max((abs(value) for value in values), default=0.0) or 1.0
-        neutral = (52, 57, 67)
-        for node, value in zip(self.visual_nodes[group], values):
+        neutral = (229, 229, 234)
+        for node, index in zip(
+            self.visual_nodes[group], self.visual_node_indices[group]
+        ):
+            value = values[index]
             strength = min(abs(value) / maximum, 1.0)
-            target = (242, 142, 43) if value >= 0 else (55, 126, 184)
+            target = (229, 138, 53) if value >= 0 else (52, 120, 184)
             color = tuple(
                 round(base + (end - base) * strength)
                 for base, end in zip(neutral, target)
@@ -766,6 +1035,9 @@ class CodeGeneratorApp:
             self.visual_window.destroy()
         self.visual_window = None
         self.visual_nodes = {}
+        self.visual_node_indices = {}
+        self.visual_weights = None
+        self.visual_weights_model_id = None
 
     def _generate(self):
         if self.model is None:
@@ -806,16 +1078,25 @@ class CodeGeneratorApp:
             code = generate_code(
                 model,
                 prompt,
-                activation_callback=self._publish_activation,
+                network_callback=self._publish_network_activation,
             )
         except (RuntimeError, ValueError) as error:
             self.messages.put(("generation_failed", str(error)))
             return
         self.messages.put(("generation_finished", code))
 
-    def _publish_activation(self, embedding, recurrent, logits, token, step):
+    def _publish_network_activation(
+        self, embedding, layers, logits, token, step, previous_layers
+    ):
         with self.activation_lock:
-            self.latest_activation = (embedding, recurrent, logits, token, step)
+            self.latest_activation = (
+                embedding,
+                layers,
+                logits,
+                token,
+                step,
+                previous_layers,
+            )
 
     def _copy_code(self):
         code = self.output.get("1.0", "end-1c")
