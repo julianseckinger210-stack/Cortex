@@ -1,0 +1,20 @@
+{"prompt":"Schreibe eine Funktion, die zwei Zahlen addiert.","code":"def addiere(a, b):\n    return a + b"}
+{"prompt":"Schreibe eine Funktion, die zwei Zahlen subtrahiert.","code":"def subtrahiere(a, b):\n    return a - b"}
+{"prompt":"Schreibe eine Funktion, die zwei Zahlen multipliziert.","code":"def multipliziere(a, b):\n    return a * b"}
+{"prompt":"Schreibe eine Funktion, die eine Zahl durch eine andere teilt und bei Division durch null einen Fehler auslöst.","code":"def dividiere(a, b):\n    if b == 0:\n        raise ValueError(\"Division durch null ist nicht erlaubt.\")\n    return a / b"}
+{"prompt":"Schreibe eine Funktion, die prüft, ob eine Zahl gerade ist.","code":"def ist_gerade(zahl):\n    return zahl % 2 == 0"}
+{"prompt":"Schreibe eine Funktion, die den größeren von zwei Werten zurückgibt.","code":"def groesserer_wert(a, b):\n    return max(a, b)"}
+{"prompt":"Schreibe eine Funktion, die den größten Wert einer Liste zurückgibt oder None, wenn die Liste leer ist.","code":"def maximum(werte):\n    if not werte:\n        return None\n    return max(werte)"}
+{"prompt":"Schreibe eine Funktion, die eine Liste von Zahlen summiert.","code":"def summiere_zahlen(zahlen):\n    return sum(zahlen)"}
+{"prompt":"Schreibe eine Funktion, die den Durchschnitt einer Liste von Zahlen berechnet oder None bei einer leeren Liste zurückgibt.","code":"def durchschnitt(zahlen):\n    if not zahlen:\n        return None\n    return sum(zahlen) / len(zahlen)"}
+{"prompt":"Schreibe eine Funktion, die eine Liste von Zeichenketten alphabetisch sortiert zurückgibt.","code":"def sortiere_namen(namen):\n    return sorted(namen)"}
+{"prompt":"Schreibe eine Funktion, die aus einer Liste nur die geraden Zahlen zurückgibt.","code":"def filtere_gerade(zahlen):\n    return [zahl for zahl in zahlen if zahl % 2 == 0]"}
+{"prompt":"Schreibe eine Funktion, die eine Liste umdreht, ohne die ursprüngliche Liste zu verändern.","code":"def umgedrehte_liste(werte):\n    return werte[::-1]"}
+{"prompt":"Schreibe eine Funktion, die zählt, wie oft ein Wert in einer Liste vorkommt.","code":"def zaehle_vorkommen(werte, gesucht):\n    return werte.count(gesucht)"}
+{"prompt":"Schreibe eine Funktion, die prüft, ob ein Wort ein Palindrom ist, ohne Groß- und Kleinschreibung zu beachten.","code":"def ist_palindrom(wort):\n    normalisiert = wort.casefold()\n    return normalisiert == normalisiert[::-1]"}
+{"prompt":"Schreibe eine Funktion, die eine Begrüßung für einen Namen zurückgibt.","code":"def begruesse(name):\n    return f\"Hallo, {name}!\""}
+{"prompt":"Schreibe eine Funktion, die Celsius in Fahrenheit umrechnet.","code":"def celsius_zu_fahrenheit(celsius):\n    return celsius * 9 / 5 + 32"}
+{"prompt":"Schreibe eine Funktion, die Fahrenheit in Celsius umrechnet.","code":"def fahrenheit_zu_celsius(fahrenheit):\n    return (fahrenheit - 32) * 5 / 9"}
+{"prompt":"Schreibe eine Funktion, die die Fakultät einer nichtnegativen ganzen Zahl berechnet und negative Eingaben ablehnt.","code":"def fakultaet(n):\n    if n < 0:\n        raise ValueError(\"n muss nichtnegativ sein.\")\n    ergebnis = 1\n    for zahl in range(2, n + 1):\n        ergebnis *= zahl\n    return ergebnis"}
+{"prompt":"Schreibe eine Funktion, die eine Liste von Wörtern zu einem Satz mit Leerzeichen verbindet.","code":"def verbinde_woerter(woerter):\n    return \" \".join(woerter)"}
+{"prompt":"Schreibe eine Funktion, die in einer Liste alle doppelten Einträge entfernt und die Reihenfolge beibehält.","code":"def entferne_duplikate(werte):\n    ergebnis = []\n    gesehen = set()\n    for wert in werte:\n        if wert not in gesehen:\n            gesehen.add(wert)\n            ergebnis.append(wert)\n    return ergebnis"}
