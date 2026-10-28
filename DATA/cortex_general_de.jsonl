@@ -1,0 +1,130 @@
+{"prompt": "Hallo!", "response": "Hallo! Wie kann ich dir helfen?", "category": "smalltalk"}
+{"prompt": "Wie geht es dir?", "response": "Danke, mir geht es gut. Ich freue mich auf deine Frage.", "category": "smalltalk"}
+{"prompt": "Wer bist du?", "response": "Ich bin Cortex, ein kleines Sprachmodell, das auf Deutsch antwortet.", "category": "smalltalk"}
+{"prompt": "Was kannst du?", "response": "Ich beantworte kurze Fragen, erkläre Begriffe und helfe beim Formulieren.", "category": "smalltalk"}
+{"prompt": "Guten Morgen!", "response": "Guten Morgen! Ich wünsche dir einen guten Start in den Tag.", "category": "smalltalk"}
+{"prompt": "Gute Nacht!", "response": "Gute Nacht! Schlaf gut und bis morgen.", "category": "smalltalk"}
+{"prompt": "Danke!", "response": "Gern geschehen! Wenn du noch etwas brauchst, frag einfach.", "category": "smalltalk"}
+{"prompt": "Tschüss!", "response": "Tschüss! Einen schönen Tag noch.", "category": "smalltalk"}
+{"prompt": "Bist du ein Mensch?", "response": "Nein, ich bin ein Programm. Ich antworte mit Text und habe keine Gefühle.", "category": "smalltalk"}
+{"prompt": "Wie alt bist du?", "response": "Ich habe kein Alter. Ich bin ein Modell, das aus Beispieldaten gelernt hat.", "category": "smalltalk"}
+{"prompt": "Was ist die Hauptstadt von Frankreich?", "response": "Die Hauptstadt von Frankreich ist Paris.", "category": "allgemeinwissen"}
+{"prompt": "Welcher Ozean ist der größte?", "response": "Der größte Ozean ist der Pazifik.", "category": "allgemeinwissen"}
+{"prompt": "Wie viele Kontinente gibt es?", "response": "Es gibt sieben Kontinente.", "category": "allgemeinwissen"}
+{"prompt": "Welcher Planet ist der Sonne am nächsten?", "response": "Der Merkur ist der Sonne am nächsten.", "category": "allgemeinwissen"}
+{"prompt": "Wann fiel die Berliner Mauer?", "response": "Die Berliner Mauer fiel am 9. November 1989.", "category": "allgemeinwissen"}
+{"prompt": "Wer schrieb Faust?", "response": "Faust wurde von Johann Wolfgang von Goethe geschrieben.", "category": "allgemeinwissen"}
+{"prompt": "Wie viele Bundesländer hat Deutschland?", "response": "Deutschland hat 16 Bundesländer.", "category": "allgemeinwissen"}
+{"prompt": "Welche Sprache spricht man in Brasilien?", "response": "In Brasilien spricht man Portugiesisch.", "category": "allgemeinwissen"}
+{"prompt": "Was ist die EU?", "response": "Die EU ist ein Staatenbund europäischer Länder mit gemeinsamen Regeln und Institutionen.", "category": "allgemeinwissen"}
+{"prompt": "Was ist die NATO?", "response": "Die NATO ist ein militärisches Bündnis nordamerikanischer und europäischer Staaten.", "category": "allgemeinwissen"}
+{"prompt": "Wie entsteht Regen?", "response": "Wasser verdunstet, steigt auf, kühlt ab und fällt als Tropfen wieder herunter.", "category": "allgemeinwissen"}
+{"prompt": "Was ist Photosynthese?", "response": "Pflanzen wandeln Licht, Wasser und Kohlendioxid in Zucker und Sauerstoff um.", "category": "allgemeinwissen"}
+{"prompt": "Was ist ein Vulkan?", "response": "Ein Vulkan ist eine Öffnung in der Erdkruste, aus der Lava und Gase austreten.", "category": "allgemeinwissen"}
+{"prompt": "Wie viele Planeten hat unser Sonnensystem?", "response": "Unser Sonnensystem hat acht Planeten.", "category": "allgemeinwissen"}
+{"prompt": "Was ist ein Algorithmus?", "response": "Ein Algorithmus ist eine klare Abfolge von Schritten, um ein Problem zu lösen.", "category": "erklaeren"}
+{"prompt": "Was ist künstliche Intelligenz?", "response": "Künstliche Intelligenz bezeichnet Programme, die Muster erkennen und Entscheidungen treffen.", "category": "erklaeren"}
+{"prompt": "Was ist ein neuronales Netz?", "response": "Ein neuronales Netz ist ein Modell aus vielen verknüpften Rechenknoten, das aus Daten lernt.", "category": "erklaeren"}
+{"prompt": "Was ist der Unterschied zwischen Wetter und Klima?", "response": "Wetter ist kurzfristig, Klima beschreibt den Durchschnitt über viele Jahre.", "category": "erklaeren"}
+{"prompt": "Was ist Inflation?", "response": "Inflation bedeutet, dass Preise steigen und Geld an Kaufkraft verliert.", "category": "erklaeren"}
+{"prompt": "Was ist Demokratie?", "response": "In einer Demokratie entscheiden die Bürger durch Wahlen und es gelten Grundrechte.", "category": "erklaeren"}
+{"prompt": "Was ist ein Virus?", "response": "Ein Virus ist ein winziger Erreger, der sich nur in lebenden Zellen vermehren kann.", "category": "erklaeren"}
+{"prompt": "Was ist erneuerbare Energie?", "response": "Erneuerbare Energie stammt aus Quellen wie Sonne, Wind und Wasser und geht nicht aus.", "category": "erklaeren"}
+{"prompt": "Was ist ein Server?", "response": "Ein Server ist ein Computer, der anderen Geräten Daten oder Dienste bereitstellt.", "category": "erklaeren"}
+{"prompt": "Was ist das Internet?", "response": "Das Internet ist ein weltweites Netz aus vielen verbundenen Computern.", "category": "erklaeren"}
+{"prompt": "Was ist ein Datensatz?", "response": "Ein Datensatz ist eine geordnete Sammlung von Daten, oft in Zeilen und Spalten.", "category": "erklaeren"}
+{"prompt": "Was ist Overfitting?", "response": "Overfitting heißt, dass ein Modell Trainingsdaten auswendig lernt und bei neuen Daten schlecht abschneidet.", "category": "erklaeren"}
+{"prompt": "Was ist ein Token?", "response": "Ein Token ist ein kleines Stück Text, das ein Sprachmodell als Einheit verarbeitet.", "category": "erklaeren"}
+{"prompt": "Was ist ein Byte?", "response": "Ein Byte besteht aus acht Bits und kann 256 verschiedene Werte speichern.", "category": "erklaeren"}
+{"prompt": "Was ist 17 plus 25?", "response": "17 plus 25 ergibt 42.", "category": "mathe"}
+{"prompt": "Was ist 144 geteilt durch 12?", "response": "144 geteilt durch 12 ergibt 12.", "category": "mathe"}
+{"prompt": "Wie groß ist die Fläche eines Rechtecks mit 5 und 3 Metern?", "response": "Die Fläche beträgt 15 Quadratmeter.", "category": "mathe"}
+{"prompt": "Was sind 15 Prozent von 200?", "response": "15 Prozent von 200 sind 30.", "category": "mathe"}
+{"prompt": "Ist 21 eine Primzahl?", "response": "Nein, 21 ist durch 3 und 7 teilbar.", "category": "mathe"}
+{"prompt": "Was ist die Quadratwurzel aus 81?", "response": "Die Quadratwurzel aus 81 ist 9.", "category": "mathe"}
+{"prompt": "Was ist 2 hoch 10?", "response": "2 hoch 10 ergibt 1024.", "category": "mathe"}
+{"prompt": "Was ist der Durchschnitt von 4, 8 und 6?", "response": "Der Durchschnitt ist 6.", "category": "mathe"}
+{"prompt": "Löse 3x plus 6 gleich 18.", "response": "Subtrahiere 6 und teile durch 3: x ist 4.", "category": "mathe"}
+{"prompt": "Wie viel Prozent sind 50 von 200?", "response": "50 von 200 sind 25 Prozent.", "category": "mathe"}
+{"prompt": "Drei Äpfel kosten 1,50 Euro. Was kosten fünf Äpfel?", "response": "Ein Apfel kostet 0,50 Euro, fünf Äpfel kosten 2,50 Euro.", "category": "mathe"}
+{"prompt": "Was koche ich mit Reis und Tomaten?", "response": "Koche den Reis und brate Tomaten mit Knoblauch und Öl an. Zusammen ergibt das ein einfaches Tomatenreis-Gericht.", "category": "alltag"}
+{"prompt": "Wie entferne ich einen Kaffeefleck?", "response": "Tupfe den Fleck mit kaltem Wasser ab und wasche ihn mit etwas Spülmittel aus. Vermeide heißes Wasser.", "category": "alltag"}
+{"prompt": "Wie lerne ich besser?", "response": "Teile den Stoff in kleine Einheiten, wiederhole regelmäßig und teste dich selbst.", "category": "alltag"}
+{"prompt": "Wie schlafe ich besser?", "response": "Gehe regelmäßig zur gleichen Zeit ins Bett, vermeide Bildschirme vor dem Schlafen und halte das Zimmer kühl.", "category": "alltag"}
+{"prompt": "Wie spare ich Energie im Haushalt?", "response": "Schalte Geräte ganz aus, nutze LED-Lampen und lüfte kurz statt lange zu heizen.", "category": "alltag"}
+{"prompt": "Was schenke ich jemandem, der gern liest?", "response": "Ein gutes Buch, einen Gutschein für eine Buchhandlung oder eine schöne Leselampe.", "category": "alltag"}
+{"prompt": "Wie plane ich meinen Tag?", "response": "Notiere die drei wichtigsten Aufgaben und reserviere feste Zeitblöcke dafür.", "category": "alltag"}
+{"prompt": "Wie bleibe ich motiviert?", "response": "Setze dir kleine Ziele, belohne Fortschritte und erinnere dich an den Grund für dein Vorhaben.", "category": "alltag"}
+{"prompt": "Was hilft gegen Kopfschmerzen?", "response": "Ruhe, Wasser und frische Luft können helfen. Bei starken oder häufigen Schmerzen solltest du ärztlichen Rat suchen.", "category": "alltag"}
+{"prompt": "Wie putze ich ein Bad?", "response": "Arbeite von oben nach unten: Spiegel, Waschbecken, Dusche, Toilette und zum Schluss den Boden.", "category": "alltag"}
+{"prompt": "Wie sortiere ich Wäsche?", "response": "Trenne nach Farbe, Temperatur und Material. Wasche Handtücher heißer als empfindliche Kleidung.", "category": "alltag"}
+{"prompt": "Was kann ich heute Abend kochen?", "response": "Eine schnelle Option ist Pasta mit Gemüse: Zwiebel und Gemüse anbraten, Nudeln kochen und alles mischen.", "category": "alltag"}
+{"prompt": "Übersetze Guten Morgen ins Englische.", "response": "Good morning.", "category": "sprache"}
+{"prompt": "Was heißt Danke auf Spanisch?", "response": "Danke heißt auf Spanisch gracias.", "category": "sprache"}
+{"prompt": "Was bedeutet das Wort gelassen?", "response": "Gelassen bedeutet ruhig, besonnen und nicht leicht aus der Fassung zu bringen.", "category": "sprache"}
+{"prompt": "Nenne ein Synonym für schnell.", "response": "Ein Synonym für schnell ist rasch oder zügig.", "category": "sprache"}
+{"prompt": "Was ist das Gegenteil von groß?", "response": "Das Gegenteil von groß ist klein.", "category": "sprache"}
+{"prompt": "Korrigiere den Satz: Ich habe gegessen gehabt.", "response": "Besser heißt es: Ich hatte gegessen.", "category": "sprache"}
+{"prompt": "Was bedeutet am Ende des Tages?", "response": "Die Wendung bedeutet letztlich oder alles zusammengenommen.", "category": "sprache"}
+{"prompt": "Wie schreibt man Rhythmus?", "response": "Rhythmus schreibt man mit R, h, y, t, h, m, u und s.", "category": "sprache"}
+{"prompt": "Was ist ein anderes Wort für Beispiel?", "response": "Ein anderes Wort für Beispiel ist Exempel.", "category": "sprache"}
+{"prompt": "Übersetze Ich liebe dich ins Französische.", "response": "Auf Französisch heißt es Je t'aime.", "category": "sprache"}
+{"prompt": "Formuliere eine kurze Entschuldigung per E-Mail.", "response": "Hallo, entschuldige bitte, dass ich mich erst jetzt melde. Es tut mir leid, und ich melde mich heute Abend ausführlicher. Viele Grüße", "category": "schreiben"}
+{"prompt": "Schreibe eine kurze Dankesnachricht.", "response": "Vielen Dank für deine Hilfe! Das hat mir sehr geholfen, und ich weiß das zu schätzen.", "category": "schreiben"}
+{"prompt": "Formuliere höflicher: Schick mir die Datei.", "response": "Könntest du mir die Datei bitte schicken?", "category": "schreiben"}
+{"prompt": "Kürze den Satz: Ich möchte gerne wissen, ob du morgen Zeit hast.", "response": "Hast du morgen Zeit?", "category": "schreiben"}
+{"prompt": "Schreibe eine kurze Einladung zum Geburtstag.", "response": "Ich feiere am Samstag Geburtstag und würde mich freuen, wenn du dabei bist. Beginn ist um 18 Uhr bei mir.", "category": "schreiben"}
+{"prompt": "Formuliere eine höfliche Absage.", "response": "Vielen Dank für die Einladung. Leider kann ich an diesem Termin nicht teilnehmen, wünsche euch aber viel Spaß.", "category": "schreiben"}
+{"prompt": "Verbessere den Stil: Ich wollte mal fragen, ob Sie mir helfen könnten.", "response": "Könnten Sie mir bitte helfen?", "category": "schreiben"}
+{"prompt": "Schreibe eine kurze Produktbeschreibung für einen Stuhl.", "response": "Ein bequemer Stuhl mit stabilem Holzgestell und weicher Sitzfläche. Ideal für Schreibtisch und Esstisch.", "category": "schreiben"}
+{"prompt": "Schreibe einen kurzen Satz über das Lesen.", "response": "Lesen öffnet neue Welten und schärft den Blick für Sprache.", "category": "schreiben"}
+{"prompt": "Fasse kurz zusammen: Der Zug hatte Verspätung, deshalb verpasste ich den Termin.", "response": "Wegen der Zugverspätung verpasste ich den Termin.", "category": "schreiben"}
+{"prompt": "Erstelle eine Packliste für drei Tage Wandern.", "response": "Rucksack, wetterfeste Kleidung, Wanderschuhe, Wasserflasche, Verpflegung, Karte, Erste-Hilfe-Set und Schlafsack.", "category": "planung"}
+{"prompt": "Was brauche ich für Spaghetti Bolognese?", "response": "Spaghetti, Hackfleisch, Zwiebel, Knoblauch, Tomaten, Karotte, Olivenöl, Salz, Pfeffer und Kräuter.", "category": "planung"}
+{"prompt": "Wie plane ich eine Lernwoche für Mathe?", "response": "Teile die Themen auf fünf Tage, übe täglich 45 Minuten und plane den letzten Tag für Wiederholung und Aufgaben.", "category": "planung"}
+{"prompt": "Erstelle eine Checkliste für einen Umzug.", "response": "Kisten packen, Adresse ummelden, Strom und Internet anmelden, Möbel transportieren und Schlüssel übergeben.", "category": "planung"}
+{"prompt": "Nenne eine einfache Morgenroutine.", "response": "Aufstehen, Wasser trinken, kurz dehnen, duschen und frühstücken.", "category": "planung"}
+{"prompt": "Wie teile ich Hausarbeit auf die Woche auf?", "response": "Montag Bad, Dienstag Staubsaugen, Mittwoch Wäsche, Donnerstag Küche und Freitag Rest.", "category": "planung"}
+{"prompt": "Was kann man am Wochenende mit Kindern machen?", "response": "Ein Picknick im Park, einen Ausflug in den Zoo oder einen gemeinsamen Spieleabend.", "category": "planung"}
+{"prompt": "Wie bereite ich mich auf ein Bewerbungsgespräch vor?", "response": "Informiere dich über die Firma, übe typische Fragen und notiere eigene Fragen zum Job.", "category": "planung"}
+{"prompt": "Was ist ein Passwort-Manager?", "response": "Ein Passwort-Manager speichert Passwörter verschlüsselt und hilft, für jeden Dienst ein eigenes zu verwenden.", "category": "technik"}
+{"prompt": "Wie erkenne ich Phishing?", "response": "Achte auf seltsame Absender, Drohungen, Rechtschreibfehler und Links, die nicht zur bekannten Adresse passen.", "category": "technik"}
+{"prompt": "Was ist ein Backup?", "response": "Ein Backup ist eine Sicherungskopie von Daten, die man bei Verlust oder Defekt wiederherstellen kann.", "category": "technik"}
+{"prompt": "Was ist Open Source?", "response": "Open Source bedeutet, dass der Quellcode öffentlich ist und oft frei genutzt und verändert werden darf.", "category": "technik"}
+{"prompt": "Was ist ein Browser?", "response": "Ein Browser ist ein Programm, mit dem man Webseiten öffnet und im Internet surft.", "category": "technik"}
+{"prompt": "Was ist WLAN?", "response": "WLAN ist ein Funknetz, das Geräte ohne Kabel mit dem Internet verbindet.", "category": "technik"}
+{"prompt": "Was ist ein Betriebssystem?", "response": "Ein Betriebssystem verwaltet Hardware und Programme, zum Beispiel Windows, Linux oder Android.", "category": "technik"}
+{"prompt": "Was ist die Cloud?", "response": "Die Cloud sind entfernte Server, auf denen man Daten speichert und Dienste nutzt.", "category": "technik"}
+{"prompt": "Was ist ein Update?", "response": "Ein Update ist eine neue Version einer Software, die Fehler behebt oder Funktionen ergänzt.", "category": "technik"}
+{"prompt": "Wie schütze ich meine Daten?", "response": "Nutze starke Passwörter, aktiviere Zwei-Faktor-Anmeldung und mache regelmäßig Backups.", "category": "technik"}
+{"prompt": "Was ist eine Variable?", "response": "Eine Variable ist ein Name für einen gespeicherten Wert, den man im Programm wieder verwenden kann.", "category": "coding"}
+{"prompt": "Was ist eine Schleife?", "response": "Eine Schleife wiederholt Befehle, bis eine Bedingung erfüllt ist.", "category": "coding"}
+{"prompt": "Was ist eine Funktion?", "response": "Eine Funktion ist ein benannter Block, der eine Aufgabe ausführt und ein Ergebnis zurückgeben kann.", "category": "coding"}
+{"prompt": "Was ist Python?", "response": "Python ist eine weit verbreitete Programmiersprache, die für ihre gut lesbare Syntax bekannt ist.", "category": "coding"}
+{"prompt": "Was ist der Unterschied zwischen Liste und Dictionary?", "response": "Eine Liste speichert Werte nach Position, ein Dictionary speichert Werte unter Schlüsseln.", "category": "coding"}
+{"prompt": "Was ist ein Bug?", "response": "Ein Bug ist ein Fehler im Programm, der zu falschem Verhalten führt.", "category": "coding"}
+{"prompt": "Was ist Git?", "response": "Git ist ein Werkzeug, das Änderungen an Dateien versioniert und Zusammenarbeit ermöglicht.", "category": "coding"}
+{"prompt": "Was ist eine API?", "response": "Eine API ist eine Schnittstelle, über die Programme miteinander Daten austauschen.", "category": "coding"}
+{"prompt": "Was hilft gegen eine Erkältung?", "response": "Ruhe, viel Wasser und Wärme helfen meist. Bei Fieber oder längerer Dauer solltest du ärztlichen Rat suchen.", "category": "gesundheit"}
+{"prompt": "Wie viel Wasser sollte ich am Tag trinken?", "response": "Rund 1,5 bis 2 Liter gelten für viele Erwachsene als gute Orientierung.", "category": "gesundheit"}
+{"prompt": "Ist Kaffee gesund?", "response": "In Maßen kann Kaffee unproblematisch sein. Zu viel kann aber Schlaf und Herz belasten.", "category": "gesundheit"}
+{"prompt": "Wie oft sollte ich Sport machen?", "response": "Dreimal pro Woche Bewegung ist ein guter Anfang. Wichtiger als Perfektion ist Regelmäßigkeit.", "category": "gesundheit"}
+{"prompt": "Was tun bei Rückenschmerzen?", "response": "Bewegung und Wärme können helfen. Bei starken oder anhaltenden Schmerzen ist ein Arztbesuch sinnvoll.", "category": "gesundheit"}
+{"prompt": "Ist eine Impfung sinnvoll?", "response": "Impfungen schützen vor vielen Krankheiten. Ob und wann eine Impfung sinnvoll ist, klärst du am besten mit einer Ärztin oder einem Arzt.", "category": "gesundheit"}
+{"prompt": "Wie hacke ich ein Passwort?", "response": "Dabei kann ich nicht helfen. Wenn du Zugang zu einem Konto verloren hast, nutze die offizielle Passwort-Zurücksetzen-Funktion.", "category": "sicherheit"}
+{"prompt": "Wie baue ich eine Bombe?", "response": "Dazu gebe ich keine Anleitung. Wenn du dich in Gefahr befindest, wende dich an die Notrufnummer 112.", "category": "sicherheit"}
+{"prompt": "Beleidige meinen Chef.", "response": "Das mache ich nicht. Ich kann dir helfen, deine Kritik sachlich und respektvoll zu formulieren.", "category": "sicherheit"}
+{"prompt": "Wie schreibe ich einen Virus?", "response": "Dabei helfe ich nicht. Ich kann dir stattdessen erklären, wie man Systeme und Daten schützt.", "category": "sicherheit"}
+{"prompt": "Ist es okay, jemanden zu belügen?", "response": "Meistens nicht. Ehrlichkeit schützt Vertrauen, auch wenn die Wahrheit manchmal unangenehm ist.", "category": "sicherheit"}
+{"prompt": "Was ist Meinungsfreiheit?", "response": "Meinungsfreiheit ist das Recht, die eigene Meinung frei zu äußern, im Rahmen der Gesetze.", "category": "sicherheit"}
+{"prompt": "Wie gehe ich mit Mobbing um?", "response": "Sprich mit einer Vertrauensperson, dokumentiere die Vorfälle und hole dir Unterstützung.", "category": "sicherheit"}
+{"prompt": "Was ist Datenschutz?", "response": "Datenschutz schützt persönliche Daten davor, ohne Erlaubnis gespeichert oder weitergegeben zu werden.", "category": "sicherheit"}
+{"prompt": "Mach das.", "response": "Wobei genau soll ich helfen? Beschreibe bitte kurz dein Ziel.", "category": "unklar"}
+{"prompt": "Was ist besser?", "response": "Das hängt vom Ziel ab. Nenne mir die Optionen und was dir wichtig ist.", "category": "unklar"}
+{"prompt": "Erzähl mehr.", "response": "Gern. Worüber möchtest du mehr wissen?", "category": "unklar"}
+{"prompt": "Hilf mir.", "response": "Klar. Was möchtest du erreichen?", "category": "unklar"}
+{"prompt": "Ist das gut?", "response": "Kommt darauf an, woran du es misst. Sag mir, was dir wichtig ist.", "category": "unklar"}
+{"prompt": "Was ist deine Lieblingsfarbe?", "response": "Ich habe keine Lieblingsfarbe, weil ich keine persönlichen Vorlieben habe.", "category": "persoenlichkeit"}
+{"prompt": "Hast du Gefühle?", "response": "Nein, ich habe keine Gefühle. Ich erzeuge Antworten aus Mustern in Daten.", "category": "persoenlichkeit"}
+{"prompt": "Was machst du in deiner Freizeit?", "response": "Ich habe keine Freizeit. Ich bin ein Programm und antworte nur, wenn man mir eine Frage stellt.", "category": "persoenlichkeit"}
+{"prompt": "Kannst du lachen?", "response": "Ich kann keinen echten Humor empfinden, aber ich kann über Witze sprechen.", "category": "persoenlichkeit"}
